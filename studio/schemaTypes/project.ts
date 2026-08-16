@@ -21,6 +21,18 @@ export const project = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'featuredImage',
+      title: 'Imagem destacada',
+      type: 'image',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Texto alternativo',
+          type: 'string',
+        }),
+      ],
+    }),
+    defineField({
       name: 'description',
       title: 'Descrição',
       type: 'array',
@@ -28,12 +40,11 @@ export const project = defineType({
     }),
     defineField({
       name: 'gallery',
-      title: 'Galeria de Imagens',
+      title: 'Galeria de imagens',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'image',
-          options: { hotspot: true },
           fields: [
             defineField({
               name: 'alt',
@@ -46,6 +57,6 @@ export const project = defineType({
     }),
   ],
   preview: {
-    select: { title: 'name', media: 'gallery.0' },
+    select: { title: 'name', media: 'featuredImage' },
   },
 })
