@@ -1,0 +1,52 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { PortableText } from "astro-portabletext";
+import { getProjects, getProjectBySlug } from "../../sanity/queries";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.slug.current },
+  }));
+}
+
+const { slug } = Astro.params as { slug: string };
+const project = await getProjectBySlug(slug);
+
+if (!project) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout>
+  <article>
+    <h1>{project.name}</h1>
+    {project.featuredImage && (
+      <figure>
+        <img
+          src={`${project.featuredImage.asset.url}?w=1200`}
+          width={project.featuredImage.asset.metadata.dimensions.width}
+          height={project.featuredImage.asset.metadata.dimensions.height}
+          alt={project.featuredImage.alt ?? project.name}
+        />
+      </figure>
+    )}
+    {project.description && <PortableText value={project.description} />}
+    {(project.gallery ?? []).filter((image) => image.asset).length > 0 && (
+      <ul>
+        {(project.gallery ?? [])
+          .filter((image) => image.asset)
+          .map((image) => (
+          <li>
+            <img
+              src={`${image.asset.url}?w=1200`}
+              width={image.asset.metadata.dimensions.width}
+              height={image.asset.metadata.dimensions.height}
+              alt={image.alt ?? project.name}
+            />
+          </li>
+        ))}
+      </ul>
+    )}
+  </article>
+</Layout>
