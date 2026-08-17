@@ -1,5 +1,13 @@
 ---
 import "../styles/global.css";
+import { getSettings } from "../sanity/queries";
+
+const settings = await getSettings();
+const title = settings?.title || "design gráfico e a cidade";
+const description = settings?.description;
+const ogImage = settings?.ogImage
+  ? `${settings.ogImage.asset.url}?w=1200`
+  : undefined;
 ---
 
 <!doctype html>
@@ -10,7 +18,12 @@ import "../styles/global.css";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro Basics</title>
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    {description && <meta property="og:description" content={description} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
   </head>
   <body>
     <slot />

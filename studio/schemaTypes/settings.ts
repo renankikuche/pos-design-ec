@@ -36,7 +36,6 @@ export const settings = defineType({
       title: 'Imagem de compartilhamento (OG)',
       type: 'image',
       group: 'seo',
-      description: 'Se vazia, usa o Logo.',
       fields: [
         defineField({
           name: 'alt',
