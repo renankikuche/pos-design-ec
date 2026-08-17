@@ -71,3 +71,26 @@ export interface Project {
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   return sanityClient.fetch<Project | null>(PROJECT_BY_SLUG_QUERY, { slug });
 }
+
+export const SETTINGS_QUERY = defineQuery(`
+  *[_id == "settings"][0]{
+    siteTitle,
+    seoTitle,
+    seoDescription,
+    ogImage{
+      asset->{ _id, url, metadata { lqip, dimensions { width, height } } },
+      alt
+    }
+  }
+`);
+
+export interface SiteSettings {
+  siteTitle: string;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  ogImage: SanityImage | null;
+}
+
+export async function getSettings(): Promise<SiteSettings | null> {
+  return sanityClient.fetch<SiteSettings | null>(SETTINGS_QUERY);
+}
