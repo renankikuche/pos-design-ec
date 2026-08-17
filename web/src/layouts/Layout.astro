@@ -1,9 +1,11 @@
 ---
 import "../styles/global.css";
+import Header from "../components/Header.astro";
 import { getSettings } from "../sanity/queries";
 
 const settings = await getSettings();
 const title = settings?.title || "design gráfico e a cidade";
+const siteName = settings?.siteTitle || title;
 const description = settings?.description;
 const ogImage = settings?.ogImage
   ? `${settings.ogImage.asset.url}?w=1200`
@@ -26,6 +28,7 @@ const ogImage = settings?.ogImage
     {ogImage && <meta property="og:image" content={ogImage} />}
   </head>
   <body>
+    <Header siteName={siteName} />
     <slot />
   </body>
 </html>

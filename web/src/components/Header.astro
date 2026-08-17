@@ -1,0 +1,30 @@
+---
+interface Props {
+  siteName: string;
+}
+
+const { siteName } = Astro.props;
+---
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #000;
+  }
+
+  .site-header__logo {
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
+
+<header class="site-header">
+  <a class="site-header__logo" href="/">{siteName}</a>
+  <nav class="site-header__nav">
+    <a href="/sobre">Sobre</a>
+  </nav>
+</header>

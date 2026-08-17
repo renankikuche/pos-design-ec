@@ -74,6 +74,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
 export const SETTINGS_QUERY = defineQuery(`
   *[_id == "settings"][0]{
+    siteTitle,
     "title": coalesce(seoTitle, siteTitle, ""),
     "description": coalesce(seoDescription, ""),
     ogImage{
@@ -84,6 +85,7 @@ export const SETTINGS_QUERY = defineQuery(`
 `);
 
 export interface SiteSettings {
+  siteTitle: string;
   title: string;
   description: string;
   ogImage: SanityImage | null;
