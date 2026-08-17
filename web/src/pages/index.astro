@@ -1,5 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ProjectList from "../components/ProjectList.astro";
+import { getProjects } from "../sanity/queries";
+
+const projects = await getProjects();
 ---
 
-<Layout />
+<Layout>
+  <ProjectList projects={projects} />
+</Layout>

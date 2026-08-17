@@ -1,0 +1,36 @@
+---
+import type { ProjectListItem } from "../sanity/queries";
+
+interface Props {
+  projects: ProjectListItem[];
+}
+
+const { projects } = Astro.props;
+---
+
+<style>
+  img {
+    display: none;
+  }
+</style>
+
+<ul class="project-list">
+  {
+    projects.map((project) => (
+      <li class="project-list__item">
+        <a class="project-list__link" href={`/projetos/${project.slug.current}`}>
+          {project.featuredImage && (
+            <img
+              class="project-list__image"
+              src={`${project.featuredImage.asset.url}?w=800`}
+              width={project.featuredImage.asset.metadata.dimensions.width}
+              height={project.featuredImage.asset.metadata.dimensions.height}
+              alt={project.featuredImage.alt ?? project.name}
+            />
+          )}
+          <span class="project-list__name">{project.name}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
