@@ -11,14 +11,9 @@ const { siteName } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem;
-    border-bottom: 1px solid #000;
-  }
-
-  .site-header__logo {
-    text-decoration: none;
-    color: inherit;
+    gap: var(--space-base);
+    padding: var(--space-base);
+    border-bottom: var(--border-width) solid var(--border-color);
   }
 </style>
 
