@@ -33,7 +33,6 @@ const { projects } = Astro.props;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--space-base);
-    list-style: none;
   }
 
   .project-list[data-view="grid"] .project-list__link {
@@ -42,8 +41,6 @@ const { projects } = Astro.props;
 
   .project-list[data-view="grid"] .project-list__image {
     display: block;
-    width: 100%;
-    height: auto;
   }
 </style>
 
