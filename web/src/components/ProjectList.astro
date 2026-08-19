@@ -1,5 +1,6 @@
 ---
 import type { ProjectListItem } from "../sanity/queries";
+import ViewToggle from "./ViewToggle.astro";
 
 interface Props {
   projects: ProjectListItem[];
@@ -9,23 +10,44 @@ const { projects } = Astro.props;
 ---
 
 <style>
-  .project-list__item {
+  .project-list {
+    transition: opacity 0.2s ease;
+  }
+
+  .project-list[data-view="list"] .project-list__item {
     padding: var(--space-base);
     border-bottom: var(--border-width) solid var(--border-color);
   }
 
-  .project-list__link {
+  .project-list[data-view="list"] .project-list__link {
     font-size: var(--font-size-display);
     letter-spacing: -0.025em;
     line-height: 1;
   }
 
-  .project-list__image {
+  .project-list[data-view="list"] .project-list__image {
     display: none;
+  }
+
+  .project-list[data-view="grid"] {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-base);
+    list-style: none;
+  }
+
+  .project-list[data-view="grid"] .project-list__link {
+    display: block;
+  }
+
+  .project-list[data-view="grid"] .project-list__image {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 </style>
 
-<ul class="project-list">
+<ul class="project-list" data-view="list">
   {
     projects.map((project) => (
       <li class="project-list__item">
@@ -48,3 +70,18 @@ const { projects } = Astro.props;
     ))
   }
 </ul>
+
+<script is:inline>
+  (function () {
+    try {
+      var savedView = localStorage.getItem("project-list-view");
+      if (savedView === "grid") {
+        document.querySelector(".project-list").dataset.view = savedView;
+      }
+    } catch (e) {
+      /* localStorage unavailable (private mode, etc.) */
+    }
+  })();
+</script>
+
+<ViewToggle />

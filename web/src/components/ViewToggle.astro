@@ -1,0 +1,70 @@
+<style>
+  .view-toggle {
+    position: fixed;
+    bottom: var(--space-base);
+    right: var(--space-base);
+    display: flex;
+    gap: var(--space-base);
+  }
+
+  .view-toggle__button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .view-toggle__button[aria-pressed="true"] {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="view-toggle" role="group" aria-label="Alternar visualização">
+  <button type="button" class="view-toggle__button" data-view-button="list">
+    lista
+  </button>
+  <button type="button" class="view-toggle__button" data-view-button="grid">
+    grid
+  </button>
+</div>
+
+<script>
+  const STORAGE_KEY = "project-list-view";
+  const FADE_MS = 200;
+
+  const list = document.querySelector<HTMLElement>(".project-list");
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-view-button]"
+  );
+
+  function syncButtons(view: string | undefined) {
+    buttons.forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.viewButton === view)
+      );
+    });
+  }
+
+  syncButtons(list?.dataset.view);
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const view = button.dataset.viewButton;
+      if (!view || !list || list.dataset.view === view) return;
+
+      list.style.opacity = "0";
+      setTimeout(() => {
+        list.dataset.view = view;
+        list.style.opacity = "1";
+        syncButtons(view);
+      }, FADE_MS);
+
+      try {
+        localStorage.setItem(STORAGE_KEY, view);
+      } catch (e) {
+        /* localStorage unavailable (private mode, etc.) */
+      }
+    });
+  });
+</script>
