@@ -21,6 +21,24 @@ export const project = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'year',
+      title: 'Ano',
+      type: 'reference',
+      to: [{ type: 'taxonomyYear' }],
+    }),
+    defineField({
+      name: 'projectType',
+      title: 'Tipo',
+      type: 'reference',
+      to: [{ type: 'taxonomyType' }],
+    }),
+    defineField({
+      name: 'subject',
+      title: 'Assunto',
+      type: 'reference',
+      to: [{ type: 'taxonomySubject' }],
+    }),
+    defineField({
       name: 'featuredImage',
       title: 'Imagem destacada',
       type: 'image',

@@ -19,7 +19,13 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
+      S.documentTypeListItem('project'),
+
+      S.divider(),
+
       ...S.documentTypeListItems().filter(
-        (listItem) => !SINGLETONS.includes(listItem.getId() as string),
+        (listItem) =>
+          !SINGLETONS.includes(listItem.getId() as string) &&
+          listItem.getId() !== 'project',
       ),
     ])
