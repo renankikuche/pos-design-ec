@@ -26,7 +26,23 @@ const { projects } = Astro.props;
   }
 
   .project-list[data-view="list"] .project-list__image {
-    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 33.33vw;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .project-list[data-view="list"] .project-list__item--active .project-list__image {
+    opacity: 1;
+  }
+
+  .project-list[data-view="list"] .project-list__item--active .project-list__name {
+    color: transparent;
+    -webkit-text-stroke: var(--border-width) var(--border-color);
   }
 
   .project-list[data-view="grid"] {
@@ -79,6 +95,58 @@ const { projects } = Astro.props;
       /* localStorage unavailable (private mode, etc.) */
     }
   })();
+</script>
+
+<script>
+  const ACTIVE_CLASS = "project-list__item--active";
+
+  const list = document.querySelector<HTMLElement>(".project-list");
+
+  let mouseX = -1;
+  let mouseY = -1;
+  let activeItem: HTMLElement | null = null;
+  let ticking = false;
+
+  function setActive(next: HTMLElement | null) {
+    if (next === activeItem) return;
+    activeItem?.classList.remove(ACTIVE_CLASS);
+    next?.classList.add(ACTIVE_CLASS);
+    activeItem = next;
+  }
+
+  function updateActiveItem() {
+    ticking = false;
+
+    if (!list || list.dataset.view !== "list" || mouseX < 0 || mouseY < 0) {
+      setActive(null);
+      return;
+    }
+
+    const el = document.elementFromPoint(mouseX, mouseY);
+    const item = el?.closest<HTMLElement>(".project-list__item") ?? null;
+
+    setActive(list.contains(item) ? item : null);
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateActiveItem);
+  }
+
+  document.addEventListener("mousemove", (event) => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    requestUpdate();
+  });
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+
+  document.addEventListener("mouseleave", () => {
+    mouseX = -1;
+    mouseY = -1;
+    requestUpdate();
+  });
 </script>
 
 <ViewToggle />
